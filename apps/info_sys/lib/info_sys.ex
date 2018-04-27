@@ -1,14 +1,14 @@
 defmodule InfoSys do
   use Application
 
-  def start(_type, _args) do
-    InfoSys.Supervisor.start_link()
-  end
-
   @backends [InfoSys.Wolfram]
 
   defmodule Result do
     defstruct score: 0, text: nil, url: nil, backend: nil
+  end
+
+  def start(_type, _args) do
+    InfoSys.Supervisor.start_link()
   end
 
   def start_link(backend, query, query_ref, owner, limit) do
@@ -29,9 +29,11 @@ defmodule InfoSys do
   def spawn_query(backend, query, limit) do
     query_ref = make_ref()
     opts = [backend, query, query_ref, self(), limit]
+
     {:ok, pid} = Supervisor.start_child(InfoSys.Supervisor, opts)
     monitor_ref = Process.monitor(pid)
-    {:pid, monitor_ref, query_ref}
+
+    {pid, monitor_ref, query_ref}
   end
 
   defp await_results(children, opts) do
@@ -39,6 +41,7 @@ defmodule InfoSys do
     timer = Process.send_after(self(), :timedout, timeout)
     results = await_result(children, [], :infinity)
     cleanup(timer)
+
     results
   end
 
@@ -51,7 +54,7 @@ defmodule InfoSys do
         await_result(tail, results ++ acc, timeout)
       {:DOWN, ^monitor_ref, :process, ^pid, _reason} ->
         await_result(tail, acc, timeout)
-      :timeout ->
+      :timedout ->
         kill(pid, monitor_ref)
         await_result(tail, acc, 0)
       after
@@ -65,6 +68,7 @@ defmodule InfoSys do
 
   defp kill(pid, ref) do
     Process.demonitor(ref, [:flush])
+    Process.exit(pid, :kill)
   end
 
   defp cleanup(timer) do

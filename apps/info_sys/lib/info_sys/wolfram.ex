@@ -6,7 +6,7 @@ defmodule InfoSys.Wolfram do
     Task.start_link(__MODULE__, :fetch, [query, query_ref, owner, limit])
   end
 
-  def fetch(query_str, query_ref, owner, limit) do
+  def fetch(query_str, query_ref, owner, _limit) do
     query_str
     |> fetch_xml()
     |> xpath(~x"/queryresult/pod[contains(@title, 'Result') or
