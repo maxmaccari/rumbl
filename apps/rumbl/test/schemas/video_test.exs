@@ -1,5 +1,5 @@
 defmodule Rumbl.VideoTest do
-  use Rumbl.ModelCase
+  use Rumbl.DataCase
 
   alias Rumbl.Video
 

@@ -1,5 +1,7 @@
 defmodule Rumbl.Video do
-  use RumblWeb, :model
+  use Ecto.Schema
+
+  import Ecto.Changeset
 
   @primary_key {:id, Rumbl.Permalink, autogenerate: true}
 

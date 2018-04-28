@@ -1,5 +1,8 @@
 defmodule Rumbl.Category do
-  use RumblWeb, :model
+  use Ecto.Schema
+
+  import Ecto.Changeset
+  import Ecto.Query
 
   schema "categories" do
     field :name, :string

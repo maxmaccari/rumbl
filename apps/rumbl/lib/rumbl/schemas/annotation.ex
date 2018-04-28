@@ -1,5 +1,7 @@
 defmodule Rumbl.Annotation do
-  use RumblWeb, :model
+  use Ecto.Schema
+
+  import Ecto.Changeset
 
   schema "annotations" do
     field :body, :string

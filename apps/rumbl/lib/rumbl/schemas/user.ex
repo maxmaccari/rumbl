@@ -1,5 +1,7 @@
 defmodule Rumbl.User do
-  use RumblWeb, :model
+  use Ecto.Schema
+
+  import Ecto.Changeset
 
   schema "users" do
     field :name, :string

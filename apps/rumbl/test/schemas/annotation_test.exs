@@ -1,5 +1,5 @@
 defmodule Rumbl.AnnotationTest do
-  use Rumbl.ModelCase
+  use Rumbl.DataCase
 
   alias Rumbl.Annotation
 

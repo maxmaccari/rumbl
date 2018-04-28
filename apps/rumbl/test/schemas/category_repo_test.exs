@@ -1,5 +1,5 @@
 defmodule Rumbl.CategoryRepoTest do
-  use Rumbl.ModelCase
+  use Rumbl.DataCase
   alias Rumbl.Category
 
   test "alphabetical/1 orders by name" do
