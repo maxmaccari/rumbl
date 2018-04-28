@@ -19,23 +19,23 @@ use Mix.Config
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
 # different ports.
-config :rumbl, Rumbl.Endpoint,
+config :rumbl, RumblWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../", __DIR__)]]
+                    cd: Path.expand("../assets", __DIR__)]]
 
 
 # Watch static and templates for browser reloading.
-config :rumbl, Rumbl.Endpoint,
+config :rumbl, RumblWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
-      ~r{web/views/.*(ex)$},
-      ~r{web/templates/.*(eex)$}
+      ~r{lib/rumbl_web/views/.*(ex)$},
+      ~r{lib/rumbl_web/templates/.*(eex)$}
     ]
   ]
 

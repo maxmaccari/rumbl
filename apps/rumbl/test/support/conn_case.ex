@@ -1,4 +1,4 @@
-defmodule Rumbl.ConnCase do
+defmodule RumblWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -25,11 +25,11 @@ defmodule Rumbl.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
-      import Rumbl.Router.Helpers
+      import RumblWeb.Router.Helpers
       import Rumbl.TestHelpers
 
       # The default endpoint for testing
-      @endpoint Rumbl.Endpoint
+      @endpoint RumblWeb.Endpoint
     end
   end
 

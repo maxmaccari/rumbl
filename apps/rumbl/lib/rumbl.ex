@@ -9,7 +9,7 @@ defmodule Rumbl do
     # Define workers and child supervisors to be supervised
     children = [
       supervisor(Rumbl.Repo, []),
-      supervisor(Rumbl.Endpoint, []),
+      supervisor(RumblWeb.Endpoint, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -21,7 +21,7 @@ defmodule Rumbl do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    Rumbl.Endpoint.config_change(changed, removed)
+    RumblWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end
