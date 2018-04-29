@@ -2,8 +2,11 @@ defmodule RumblWeb.VideoChannel do
   use RumblWeb, :channel
 
   alias RumblWeb.AnnotationView
+  alias RumblWeb.Presence
 
   def join("videos:" <> video_id, params, socket) do
+    send self(), :after_join
+
     last_seen_id = params["last_seen_id"] || 0
     video_id = String.to_integer(video_id)
     video = Repo.get!(Rumbl.Video, video_id)
@@ -19,6 +22,14 @@ defmodule RumblWeb.VideoChannel do
     resp = %{annotations: Phoenix.View.render_many(annotations, AnnotationView, "annotation.json")}
 
     {:ok, resp, assign(socket, :video_id, video_id)}
+  end
+
+  def handle_info(:after_join, socket) do
+    user = Repo.get(Rumbl.User, socket.assigns.user_id)
+    Presence.track(socket, user.username, %{})
+    push socket, "presence_state", Presence.list(socket)
+
+    {:noreply, socket}
   end
 
   def handle_in(event, params, socket) do

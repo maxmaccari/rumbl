@@ -1,4 +1,5 @@
 import Player from './player'
+import {Presence} from 'phoenix'
 
 let Video = {
   init(socket, element) {
@@ -12,6 +13,8 @@ let Video = {
     Player.init(element.id, playerId, () => {
       this.onReady(videoId, socket)
     })
+
+    this.presences = {}
   },
 
   onReady(videoId, socket) {
@@ -39,6 +42,18 @@ let Video = {
     vidChannel.on("new_annotation", (resp) => {
       vidChannel.params.last_seen_id = resp.id
       this.renderAnnotation(msgContainer, resp)
+    })
+
+    vidChannel.on("presence_state", state => {
+      this.presences = Presence.syncState(this.presences, state)
+      this.renderUsersList(this.presences)
+      this.renderUsersCount(this.presences)
+    })
+
+    vidChannel.on("presence_diff", diff => {
+      this.presences = Presence.syncDiff(this.presences, diff)
+      this.renderUsersList(this.presences)
+      this.renderUsersCount(this.presences)
     })
 
     vidChannel.join()
@@ -93,6 +108,19 @@ let Video = {
     let date = new Date(null)
     date.setSeconds(at / 1000)
     return date.toISOString().substr(14, 5)
+  },
+
+  renderUsersList(presences) {
+    let watchingUsersList = document.getElementById("watching-users-list")
+
+    watchingUsersList.innerHTML = Presence.list(presences, username => username)
+    .map(username => `<li>${username}</li>`)
+    .join("")
+  },
+
+  renderUsersCount(presences) {
+    let totalWatchingUsers = document.getElementById("total-watching-users")
+    totalWatchingUsers.innerHTML = Presence.list(presences).length
   }
 }
 

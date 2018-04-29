@@ -10,6 +10,7 @@ defmodule Rumbl do
     children = [
       supervisor(Rumbl.Repo, []),
       supervisor(RumblWeb.Endpoint, []),
+      supervisor(RumblWeb.Presence, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
