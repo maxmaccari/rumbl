@@ -1,4 +1,4 @@
-defmodule Rumbl.AnnotationTest do
+defmodule Rumbl.Videos.AnnotationTest do
   use Rumbl.DataCase
 
   alias Rumbl.Videos.Annotation

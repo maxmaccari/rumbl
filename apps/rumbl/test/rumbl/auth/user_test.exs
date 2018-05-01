@@ -1,4 +1,4 @@
-defmodule Rumbl.UserTest do
+defmodule Rumbl.Auth.UserTest do
   use Rumbl.DataCase, async: true
 
   alias Rumbl.Auth.User

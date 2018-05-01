@@ -1,4 +1,4 @@
-defmodule Rumbl.UserRepoTest do
+defmodule Rumbl.Auth.UserRepoTest do
   use Rumbl.DataCase
 
   alias Rumbl.Auth.User

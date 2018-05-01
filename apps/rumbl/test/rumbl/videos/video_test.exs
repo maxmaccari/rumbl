@@ -1,4 +1,4 @@
-defmodule Rumbl.VideoTest do
+defmodule Rumbl.Videos.VideoTest do
   use Rumbl.DataCase
 
   alias Rumbl.Videos.Video
