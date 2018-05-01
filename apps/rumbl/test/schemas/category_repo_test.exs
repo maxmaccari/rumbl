@@ -1,6 +1,6 @@
 defmodule Rumbl.CategoryRepoTest do
   use Rumbl.DataCase
-  alias Rumbl.Category
+  alias Rumbl.Videos.Category
 
   test "alphabetical/1 orders by name" do
     Repo.insert!(%Category{name: "c"})

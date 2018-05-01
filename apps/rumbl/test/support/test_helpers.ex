@@ -1,5 +1,5 @@
 defmodule Rumbl.TestHelpers do
-  alias Rumbl.{Repo, Auth}
+  alias Rumbl.{Auth, Videos}
 
   def insert_user(attrs \\ []) do
     Keyword.merge([
@@ -12,8 +12,6 @@ defmodule Rumbl.TestHelpers do
   end
 
   def insert_video(user, attrs \\ %{}) do
-    user
-    |> Ecto.build_assoc(:videos, attrs)
-    |> Repo.insert!()
+    Videos.insert_video!(user, attrs)
   end
 end

@@ -1,4 +1,4 @@
-defmodule Rumbl.Category do
+defmodule Rumbl.Videos.Category do
   use Ecto.Schema
 
   import Ecto.Changeset

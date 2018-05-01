@@ -1,7 +1,7 @@
 defmodule Rumbl.CategoryTest do
   use Rumbl.DataCase
 
-  alias Rumbl.Category
+  alias Rumbl.Videos.Category
 
   @valid_attrs %{name: "some name"}
   @invalid_attrs %{}

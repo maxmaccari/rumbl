@@ -1,4 +1,4 @@
-defmodule Rumbl.Video do
+defmodule Rumbl.Videos.Video do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -11,8 +11,8 @@ defmodule Rumbl.Video do
     field :description, :string
     field :slug, :string
     belongs_to :user, Rumbl.Auth.User, foreign_key: :user_id
-    belongs_to :category, Rumbl.Category
-    has_many :annotations, Rumbl.Annotation
+    belongs_to :category, Rumbl.Videos.Category
+    has_many :annotations, Rumbl.Videos.Annotation
 
     timestamps()
   end
@@ -43,7 +43,7 @@ defmodule Rumbl.Video do
   end
 end
 
-defimpl Phoenix.Param, for: Rumbl.Video do
+defimpl Phoenix.Param, for: Rumbl.VIdeos.Video do
   def to_param(%{slug: slug, id: id}) do
     "#{id}-#{slug}"
   end

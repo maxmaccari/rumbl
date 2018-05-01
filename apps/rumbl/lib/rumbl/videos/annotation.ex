@@ -1,4 +1,4 @@
-defmodule Rumbl.Annotation do
+defmodule Rumbl.Videos.Annotation do
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -7,7 +7,7 @@ defmodule Rumbl.Annotation do
     field :body, :string
     field :at, :integer
     belongs_to :user, Rumbl.Auth.User, foreign_key: :user_id
-    belongs_to :video, Rumbl.Video, foreign_key: :video_id
+    belongs_to :video, Rumbl.Videos.Video, foreign_key: :video_id
 
     timestamps()
   end

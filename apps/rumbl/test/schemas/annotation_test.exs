@@ -1,7 +1,7 @@
 defmodule Rumbl.AnnotationTest do
   use Rumbl.DataCase
 
-  alias Rumbl.Annotation
+  alias Rumbl.Videos.Annotation
 
   @valid_attrs %{at: 42, body: "some body"}
   @invalid_attrs %{}

@@ -1,7 +1,7 @@
 defmodule Rumbl.VideoTest do
   use Rumbl.DataCase
 
-  alias Rumbl.Video
+  alias Rumbl.Videos.Video
 
   @valid_attrs %{description: "some description", title: "some title", url: "some url"}
   @invalid_attrs %{}

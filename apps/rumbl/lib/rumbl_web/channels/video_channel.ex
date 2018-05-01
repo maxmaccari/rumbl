@@ -4,22 +4,16 @@ defmodule RumblWeb.VideoChannel do
   alias RumblWeb.AnnotationView
   alias RumblWeb.Presence
 
-  alias Rumbl.Auth
+  alias Rumbl.{Auth, Videos}
 
   def join("videos:" <> video_id, params, socket) do
     send self(), :after_join
 
     last_seen_id = params["last_seen_id"] || 0
     video_id = String.to_integer(video_id)
-    video = Repo.get!(Rumbl.Video, video_id)
+    video = Videos.find_video!(video_id)
 
-    annotations = Repo.all(
-      from a in assoc(video, :annotations),
-      where: a.id > ^last_seen_id,
-      order_by: [asc: a.at, asc: a.id],
-      limit: 200,
-      preload: [:user]
-    )
+    annotations = Videos.list_video_annotations(video, last_seen_id)
 
     resp = %{annotations: Phoenix.View.render_many(annotations, AnnotationView, "annotation.json")}
 
@@ -40,12 +34,7 @@ defmodule RumblWeb.VideoChannel do
   end
 
   def handle_in("new_annotation", params, user, socket) do
-    changeset =
-      user
-      |> build_assoc(:annotations, video_id: socket.assigns.video_id)
-      |> Rumbl.Annotation.changeset(params)
-
-    case Repo.insert(changeset) do
+    case Videos.insert_annotation(user, socket.assigns.video_id, params) do
       {:ok, annotation} ->
         broadcast_annotation(socket, annotation)
         Task.start_link(fn -> compute_additional_info(annotation, socket) end)
@@ -56,7 +45,7 @@ defmodule RumblWeb.VideoChannel do
   end
 
   defp broadcast_annotation(socket, annotation) do
-    annotation = Repo.preload(annotation, :user)
+    annotation = Videos.preload_user(annotation)
     rendered_ann = Phoenix.View.render(AnnotationView, "annotation.json", %{
       annotation: annotation
     })
@@ -67,12 +56,9 @@ defmodule RumblWeb.VideoChannel do
     for result <- InfoSys.compute(annotation.body, limit: 1,
                                                          timeout: 10_000) do
       attrs = %{url: result.url, body: result.text, at: annotation.at}
-      info_changeset =
-        Auth.find_user_by_username!(result.backend)
-        |> build_assoc(:annotations, video_id: annotation.video_id)
-        |> Rumbl.Annotation.changeset(attrs)
+      user = Auth.find_user_by_username!(result.backend)
 
-      case Repo.insert(info_changeset) do
+      case Videos.insert_annotation(user, annotation.video_id, attrs) do
         {:ok, info_ann} -> broadcast_annotation(socket, info_ann)
         {:error, _changeset} -> :ignore
       end

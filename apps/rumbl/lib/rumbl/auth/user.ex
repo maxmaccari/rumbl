@@ -8,8 +8,8 @@ defmodule Rumbl.Auth.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_hash, :string
-    has_many :videos, Rumbl.Video
-    has_many :annotations, Rumbl.Annotation
+    has_many :videos, Rumbl.Videos.Video
+    has_many :annotations, Rumbl.Videos.Annotation
 
     timestamps()
   end
