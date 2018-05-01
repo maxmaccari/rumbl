@@ -1,7 +1,7 @@
 defmodule Rumbl.UserRepoTest do
   use Rumbl.DataCase
 
-  alias Rumbl.User
+  alias Rumbl.Auth.User
 
   @valid_attrs %{name: "A User", username: "eva"}
 

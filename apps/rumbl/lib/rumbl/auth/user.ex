@@ -1,4 +1,4 @@
-defmodule Rumbl.User do
+defmodule Rumbl.Auth.User do
   use Ecto.Schema
 
   import Ecto.Changeset

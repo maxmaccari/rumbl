@@ -20,7 +20,7 @@ defmodule RumblWeb.AuthTest do
 
     conn =
     conn
-    |> assign(:current_user, %Rumbl.User{})
+    |> assign(:current_user, %Rumbl.Auth.User{})
     |> Auth.authenticate_user([])
     refute conn.halted
   end
@@ -28,7 +28,7 @@ defmodule RumblWeb.AuthTest do
   test "login puts the user in the session", %{conn: conn} do
     login_conn =
       conn
-      |> Auth.login(%Rumbl.User{id: 123})
+      |> Auth.login(%Rumbl.Auth.User{id: 123})
       |> send_resp(:ok, "")
     next_conn = get(login_conn, "/")
     assert get_session(next_conn, :user_id) == 123
@@ -63,19 +63,19 @@ defmodule RumblWeb.AuthTest do
   test "login with a valid username and pass", %{conn: conn} do
     user = insert_user(username: "me", password: "secret")
     {:ok, conn} =
-      Auth.login_by_username_and_pass(conn, "me", "secret", repo: Repo)
+      Auth.login_by_username_and_pass(conn, "me", "secret")
 
     assert conn.assigns.current_user.id == user.id
   end
 
   test "login with a not found user", %{conn: conn} do
     assert {:error, :not_found, _conn} =
-      Auth.login_by_username_and_pass(conn, "me", "secret", repo: Repo)
+      Auth.login_by_username_and_pass(conn, "me", "secret")
   end
 
   test "login with password mismatch", %{conn: conn} do
     _ = insert_user(username: "me", password: "secret")
     assert {:error, :unauthorized, _conn} =
-      Auth.login_by_username_and_pass(conn, "me", "wrong", repo: Repo)
+      Auth.login_by_username_and_pass(conn, "me", "wrong")
   end
 end

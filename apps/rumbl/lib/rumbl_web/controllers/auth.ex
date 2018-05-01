@@ -1,16 +1,15 @@
 defmodule RumblWeb.Auth do
   import Plug.Conn
 
-  def init(opts) do
-    Keyword.fetch!(opts, :repo)
+  def init(_opts) do
   end
 
-  def call(conn, repo) do
+  def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
     cond do
       user = conn.assigns[:current_user] ->
         put_current_user(conn, user)
-      user = user_id && repo.get(Rumbl.User, user_id) ->
+      user = user_id && Rumbl.Auth.find_user(user_id) ->
         put_current_user(conn, user)
       true ->
         assign(conn, :current_user, nil)
@@ -32,20 +31,10 @@ defmodule RumblWeb.Auth do
     |> assign(:user_token, token)
   end
 
-  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
-
-  def login_by_username_and_pass(conn, username, given_pass, opts) do
-    repo = Keyword.fetch!(opts, :repo)
-    user = repo.get_by(Rumbl.User, username: username)
-
-    cond do
-      user && checkpw(given_pass, user.password_hash) ->
-        {:ok, login(conn, user)}
-      user ->
-        {:error, :unauthorized, conn}
-      true ->
-        dummy_checkpw()
-        {:error, :not_found, conn}
+  def login_by_username_and_pass(conn, username, given_pass) do
+    case Rumbl.Auth.login_by_username_and_pass(username, given_pass) do
+      {:ok, user} -> {:ok, login(conn, user)}
+      {:error, reason} -> {:error, reason, conn}
     end
   end
 

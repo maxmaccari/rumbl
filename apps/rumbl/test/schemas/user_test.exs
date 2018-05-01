@@ -1,7 +1,7 @@
 defmodule Rumbl.UserTest do
   use Rumbl.DataCase, async: true
 
-  alias Rumbl.User
+  alias Rumbl.Auth.User
 
   @valid_attrs %{name: "A User", username: "eva", password: "secret"}
   @invalid_attrs %{}

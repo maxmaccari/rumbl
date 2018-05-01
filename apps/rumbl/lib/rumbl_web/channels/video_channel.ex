@@ -4,6 +4,8 @@ defmodule RumblWeb.VideoChannel do
   alias RumblWeb.AnnotationView
   alias RumblWeb.Presence
 
+  alias Rumbl.Auth
+
   def join("videos:" <> video_id, params, socket) do
     send self(), :after_join
 
@@ -25,7 +27,7 @@ defmodule RumblWeb.VideoChannel do
   end
 
   def handle_info(:after_join, socket) do
-    user = Repo.get(Rumbl.User, socket.assigns.user_id)
+    user = Auth.find_user(socket.assigns.user_id)
     Presence.track(socket, user.username, %{})
     push socket, "presence_state", Presence.list(socket)
 
@@ -33,7 +35,7 @@ defmodule RumblWeb.VideoChannel do
   end
 
   def handle_in(event, params, socket) do
-    user = Repo.get(Rumbl.User, socket.assigns.user_id)
+    user = Auth.find_user(socket.assigns.user_id)
     handle_in(event, params, user, socket)
   end
 
@@ -66,7 +68,7 @@ defmodule RumblWeb.VideoChannel do
                                                          timeout: 10_000) do
       attrs = %{url: result.url, body: result.text, at: annotation.at}
       info_changeset =
-        Repo.get_by!(Rumbl.User, username: result.backend)
+        Auth.find_user_by_username!(result.backend)
         |> build_assoc(:annotations, video_id: annotation.video_id)
         |> Rumbl.Annotation.changeset(attrs)
 

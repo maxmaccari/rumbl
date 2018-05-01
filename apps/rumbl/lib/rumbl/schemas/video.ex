@@ -10,7 +10,7 @@ defmodule Rumbl.Video do
     field :title, :string
     field :description, :string
     field :slug, :string
-    belongs_to :user, Rumbl.User, foreign_key: :user_id
+    belongs_to :user, Rumbl.Auth.User, foreign_key: :user_id
     belongs_to :category, Rumbl.Category
     has_many :annotations, Rumbl.Annotation
 
