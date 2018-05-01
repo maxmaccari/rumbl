@@ -1,5 +1,5 @@
 defmodule RumblWeb.VideoControllerTest do
-  use RumblWeb.ConnCase
+  use RumblWeb.ConnCase, async: true
   alias Rumbl.Video
 
   setup %{conn: conn} = config do

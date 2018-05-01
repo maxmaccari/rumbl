@@ -1,5 +1,5 @@
 defmodule RumblWeb.PageControllerTest do
-  use RumblWeb.ConnCase
+  use RumblWeb.ConnCase, async: true
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"
